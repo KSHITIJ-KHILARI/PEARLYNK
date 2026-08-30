@@ -78,11 +78,12 @@ pearlynk/
 │   └── icon128.png        # Chrome Web Store icon (128×128)
 ├── tests/
 │   └── engine.test.js     # Unit tests for the scoring engine
-├── docs/
-│   ├── index.html         # Landing page
-│   ├── styles.css         # Landing page styles
-│   └── script.js          # Landing page interactions & animations
+├── index.html             # Landing page
+├── styles.css             # Landing page styles
+├── script.js              # Landing page interactions & animations
+├── pearlynk-v2.0.0.zip    # Extension ZIP download package
 ├── .gitignore
+├── .nojekyll
 ├── LICENSE
 └── README.md
 ```
@@ -107,11 +108,14 @@ These URLs are safe to copy into the extension. Pearlynk only analyzes the URL s
 | `https://g00gle.com` | 25 | Safe |
 | `https://example.xyz` | 15 | Safe |
 
-## Website
+## Deployment
 
-The `docs/` directory contains a premium landing page for the extension. It can be deployed to GitHub Pages or any static hosting.
+Because `index.html` is at the root of the repository, this project can be deployed with **zero configuration** to any hosting provider:
 
-> **Note:** After pushing to GitHub, update the Install and View Repository button URLs in `docs/index.html` to point to your actual repository. Search for `YOUR_USERNAME` and replace with your GitHub username.
+- **Vercel**: Import the repository and click **Deploy**.
+- **Netlify**: Import the repository and click **Deploy**.
+- **GitHub Pages**: Go to **Settings > Pages**, set Branch to `main` and Folder to `/ (root)`.
+- **Render / Cloudflare Pages**: Import and deploy directly.
 
 ## Limitations
 

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pearlynk — Phishing & Malicious URL Early Warning System</title>
+  <meta name="description"
+    content="Heuristic URL risk analysis with local scoring. Safe / Suspicious / High Risk verdicts with clear reasons." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div id="cursor-glow" aria-hidden="true"></div>
+  <canvas id="bgCanvas" aria-hidden="true"></canvas>
+  <div id="scan-line" aria-hidden="true"></div>
+  <div id="scroll-progress" aria-hidden="true"></div>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="nav" id="nav">
+    <div class="container nav__inner">
+      <a class="nav__brand" href="#" aria-label="Pearlynk home">
+        <svg class="nav__logo" width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="2" />
+          <path d="M12 7L14.5 10.5L18.5 11L15.5 14L16.5 18L12 16L7.5 18L8.5 14L5.5 11L9.5 10.5L12 7Z"
+            fill="currentColor" />
+        </svg>
+        <span class="nav__wordmark">Pearlynk</span>
+      </a>
+      <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu"
+        aria-label="Toggle navigation">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <line x1="4" y1="6" x2="20" y2="6" />
+          <line x1="4" y1="12" x2="20" y2="12" />
+          <line x1="4" y1="18" x2="20" y2="18" />
+        </svg>
+      </button>
+      <div class="nav__menu" id="navMenu">
+        <a class="nav__link" href="#features">Features</a>
+        <a class="nav__link" href="#how-it-works">How It Works</a>
+        <a class="nav__link" href="#demo">Demo</a>
+        <a class="nav__link" href="#install">Install</a>
+        <a class="nav__link" href="#faq">FAQ</a>
+        <a class="btn btn--primary btn--sm" href="#install">Get Extension</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__ambient" aria-hidden="true">
+        <div class="hero__grid"></div>
+      </div>
+      <div class="container hero__content reveal">
+        <div class="hero__badge">Manifest V3 Chrome Extension</div>
+        <h1 id="hero-title" class="hero__title">
+          Phishing &amp; Malicious URL<br />
+          <span class="text-gradient">Early Warning System</span>
+        </h1>
+        <p class="hero__subtitle">
+          Assess any URL before you trust it. Get a clear 0–100 risk score a Safe / Suspicious / High Risk verdict and
+          plain language reasons all computed locally in your browser.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary btn--lg" href="#install">
+            Download Extension
+            <svg class="btn__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+          </a>
+          <a class="btn btn--outline btn--lg" href="#how-it-works">See How It Works</a>
+        </div>
+        <div class="hero__gauges" aria-label="Example risk scores">
+          <div class="gauge-card">
+            <div class="gauge" aria-hidden="true">
+              <svg viewBox="0 0 36 36" class="gauge__svg">
+                <path class="gauge__bg"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="gauge__fill gauge__fill--safe" stroke-dasharray="5, 100"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="gauge__value">5</div>
+            </div>
+            <div class="gauge__label">Safe</div>
+          </div>
+          <div class="gauge-card">
+            <div class="gauge" aria-hidden="true">
+              <svg viewBox="0 0 36 36" class="gauge__svg">
+                <path class="gauge__bg"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="gauge__fill gauge__fill--suspicious" stroke-dasharray="40, 100"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="gauge__value">40</div>
+            </div>
+            <div class="gauge__label">Suspicious</div>
+          </div>
+          <div class="gauge-card">
+            <div class="gauge" aria-hidden="true">
+              <svg viewBox="0 0 36 36" class="gauge__svg">
+                <path class="gauge__bg"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="gauge__fill gauge__fill--high" stroke-dasharray="75, 100"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="gauge__value">75</div>
+            </div>
+            <div class="gauge__label">High Risk</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section__header reveal">
+          <h2 class="section__title">Built for clarity, privacy and speed</h2>
+          <p class="section__subtitle">Every feature is designed to give you actionable insight without friction.</p>
+        </div>
+        <div class="grid grid--3 feature-cards">
+          <article class="card feature-card reveal">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Fully Local Analysis</h3>
+            <p class="feature-card__text">No API keys. No backend. No data leaves your browser. All risk scoring is
+              deterministic and runs offline.</p>
+          </article>
+          <article class="card feature-card reveal">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Instant Verdicts</h3>
+            <p class="feature-card__text">Paste any URL or analyze the current tab. Get a 0–100 risk score, a clear
+              verdict and specific reasons in milliseconds.</p>
+          </article>
+          <article class="card feature-card reveal">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+                <polyline points="10 9 9 9 8 9" />
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Explainable Signals</h3>
+            <p class="feature-card__text">Every point is explained. See whether a domain uses a raw IP, punycode,
+              suspicious TLD or resembles a trusted brand.</p>
+          </article>
+          <article class="card feature-card reveal">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Privacy First</h3>
+            <p class="feature-card__text">History is stored locally in your browser. We never track profile or transmit
+              your browsing data anywhere.</p>
+          </article>
+          <article class="card feature-card reveal">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Current Tab Analysis</h3>
+            <p class="feature-card__text">One click scans the active tab URL. Optional auto check updates your toolbar
+              badge as you browse.</p>
+          </article>
+          <article class="card feature-card reveal">
+            <div class="feature-card__icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Deterministic Scoring</h3>
+            <p class="feature-card__text">The same URL always produces the same score. Transparent rules mean no black
+              box AI or hidden logic.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--elevated" id="how-it-works">
+      <div class="container">
+        <div class="section__header reveal">
+          <h2 class="section__title">How It Works</h2>
+          <p class="section__subtitle">Three steps from URL to verdict. No sign-up. No server. No wait.</p>
+        </div>
+        <ol class="timeline">
+          <li class="timeline__item reveal">
+            <div class="timeline__marker" aria-hidden="true">1</div>
+            <div class="card timeline__content">
+              <h3 class="timeline__title">Submit a URL</h3>
+              <p class="timeline__text">Paste any link into the popup or click <strong>Analyze Current Tab</strong> to
+                scan the page you are on.</p>
+            </div>
+          </li>
+          <li class="timeline__item reveal">
+            <div class="timeline__marker" aria-hidden="true">2</div>
+            <div class="card timeline__content">
+              <h3 class="timeline__title">Local Heuristic Engine</h3>
+              <p class="timeline__text">Pearlynk evaluates HTTP vs HTTPS, IP hosts, subdomain depth, length, suspicious
+                keywords, punycode, obfuscation, lookalike domains and risky TLDs.</p>
+            </div>
+          </li>
+          <li class="timeline__item reveal">
+            <div class="timeline__marker" aria-hidden="true">3</div>
+            <div class="card timeline__content">
+              <h3 class="timeline__title">Score &amp; Explain</h3>
+              <p class="timeline__text">You get a 0–100 risk score a Safe / Suspicious / High Risk verdict and a list of
+                detected signals with their impact.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="demo">
+      <div class="container">
+        <div class="section__header reveal">
+          <h2 class="section__title">Deterministic Demo URLs</h2>
+          <p class="section__subtitle">These examples are safe to copy. Pearlynk does not visit or execute them it only
+            analyzes the string you provide.</p>
+        </div>
+        <div class="demo-grid">
+          <div class="card demo-card reveal">
+            <div class="demo-card__header">
+              <span class="badge badge--safe">Safe</span>
+              <span class="demo-card__score">Score: 5</span>
+            </div>
+            <code class="demo-card__url">https://www.google.com</code>
+            <button class="btn btn--outline btn--sm copy-btn" data-url="https://www.google.com" aria-label="Copy URL">
+              <svg class="btn__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
+              Copy
+            </button>
+          </div>
+          <div class="card demo-card reveal">
+            <div class="demo-card__header">
+              <span class="badge badge--safe">Safe</span>
+              <span class="demo-card__score">Score: 15</span>
+            </div>
+            <code class="demo-card__url">http://example.com</code>
+            <button class="btn btn--outline btn--sm copy-btn" data-url="http://example.com" aria-label="Copy URL">
+              <svg class="btn__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
+              Copy
+            </button>
+          </div>
+          <div class="card demo-card reveal">
+            <div class="demo-card__header">
+              <span class="badge badge--suspicious">Suspicious</span>
+              <span class="demo-card__score">Score: 40</span>
+            </div>
+            <code class="demo-card__url">http://192.168.1.1</code>
+            <button class="btn btn--outline btn--sm copy-btn" data-url="http://192.168.1.1" aria-label="Copy URL">
+              <svg class="btn__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
+              Copy
+            </button>
+          </div>
+          <div class="card demo-card reveal">
+            <div class="demo-card__header">
+              <span class="badge badge--safe">Safe</span>
+              <span class="demo-card__score">Score: 25</span>
+            </div>
+            <code class="demo-card__url">https://g00gle.com</code>
+            <button class="btn btn--outline btn--sm copy-btn" data-url="https://g00gle.com" aria-label="Copy URL">
+              <svg class="btn__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
+              Copy
+            </button>
+          </div>
+          <div class="card demo-card reveal">
+            <div class="demo-card__header">
+              <span class="badge badge--safe">Safe</span>
+              <span class="demo-card__score">Score: 15</span>
+            </div>
+            <code class="demo-card__url">https://example.xyz</code>
+            <button class="btn btn--outline btn--sm copy-btn" data-url="https://example.xyz" aria-label="Copy URL">
+              <svg class="btn__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
+              Copy
+            </button>
+          </div>
+          <div class="card demo-card reveal">
+            <div class="demo-card__header">
+              <span class="badge badge--suspicious">Suspicious</span>
+              <span class="demo-card__score">Score: 55</span>
+            </div>
+            <code class="demo-card__url">https://a.b.c.d.e.f.xn--pple-43d.xyz/</code>
+            <button class="btn btn--outline btn--sm copy-btn" data-url="https://a.b.c.d.e.f.xn--pple-43d.xyz/"
+              aria-label="Copy URL">
+              <svg class="btn__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
+              Copy
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--elevated" id="install">
+      <div class="container">
+        <div class="section__header reveal">
+          <h2 class="section__title">Install in 60 seconds</h2>
+          <p class="section__subtitle">Load the unpacked extension in Chrome or any Chromium-based browser.</p>
+        </div>
+        <div class="install-grid">
+          <div class="install-card reveal">
+            <div class="install-card__number" aria-hidden="true">1</div>
+            <h3 class="install-card__title">Download</h3>
+            <p class="install-card__text">Download or clone the Pearlynk repository to your computer.</p>
+          </div>
+          <div class="install-card reveal">
+            <div class="install-card__number" aria-hidden="true">2</div>
+            <h3 class="install-card__title">Extract ZIP</h3>
+            <p class="install-card__text">If you downloaded a ZIP extract it to a folder. Chrome requires an unzipped
+              directory.</p>
+          </div>
+          <div class="install-card reveal">
+            <div class="install-card__number" aria-hidden="true">3</div>
+            <h3 class="install-card__title">Open Extensions</h3>
+            <p class="install-card__text">Go to <code>chrome://extensions</code> and enable <strong>Developer
+                mode</strong>.</p>
+          </div>
+          <div class="install-card reveal">
+            <div class="install-card__number" aria-hidden="true">4</div>
+            <h3 class="install-card__title">Load Unpacked</h3>
+            <p class="install-card__text">Click <strong>Load unpacked</strong> and select the Pearlynk folder. Pin the
+              icon to your toolbar.</p>
+          </div>
+        </div>
+        <div class="install-cta reveal">
+          <a class="btn btn--primary btn--lg" href="pearlynk-v2.0.0.zip" download>
+            Install
+            <svg class="btn__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+          </a>
+          <a class="btn btn--outline btn--lg" href="https://github.com/KSHITIJ-KHILARI/PEARLYNK" target="_blank"
+            rel="noopener noreferrer">
+            View Repository
+            <svg class="btn__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path
+                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section__header reveal">
+          <h2 class="section__title">Frequently Asked Questions</h2>
+          <p class="section__subtitle">Quick answers to common questions about Pearlynk.</p>
+        </div>
+        <div class="faq">
+          <details class="faq__item reveal">
+            <summary class="faq__question">Is Pearlynk free?</summary>
+            <div class="faq__answer">
+              <p>Yes. Pearlynk is open-source and free to use. There are no paid tiers, no subscriptions and no account
+                required.</p>
+            </div>
+          </details>
+          <details class="faq__item reveal">
+            <summary class="faq__question">Does Pearlynk guarantee a site is safe?</summary>
+            <div class="faq__answer">
+              <p>No. Pearlynk provides heuristic signals and a risk score not a safety guarantee. Always verify links
+                through additional trusted sources before entering sensitive information.</p>
+            </div>
+          </details>
+          <details class="faq__item reveal">
+            <summary class="faq__question">Why must I extract the ZIP before loading it?</summary>
+            <div class="faq__answer">
+              <p>Chrome requires an unzipped directory to load an unpacked extension. Loading a ZIP file directly is not
+                supported by the browser.</p>
+            </div>
+          </details>
+          <details class="faq__item reveal">
+            <summary class="faq__question">Is my browsing data private?</summary>
+            <div class="faq__answer">
+              <p>Yes. All analysis runs locally in your browser. History is stored in Chrome’s local storage. Pearlynk
+                never sends data to external servers.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <svg class="footer__logo" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="2" />
+          <path d="M12 7L14.5 10.5L18.5 11L15.5 14L16.5 18L12 16L7.5 18L8.5 14L5.5 11L9.5 10.5L12 7Z"
+            fill="currentColor" />
+        </svg>
+        <span class="footer__wordmark">Pearlynk</span>
+      </div>
+      <p class="footer__copy">Heuristic analysis.</p>
+      <p class="footer__copy">Built by Team Nocturnal.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
