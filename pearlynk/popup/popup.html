@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pearlynk</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="11" stroke="white" stroke-width="2"/>
+          <path d="M12 7L14.5 10.5L18.5 11L15.5 14L16.5 18L12 16L7.5 18L8.5 14L5.5 11L9.5 10.5L12 7Z" fill="#FFD700"/>
+        </svg>
+        <h1>Pearlynk</h1>
+      </div>
+      <p class="subtitle">Phishing &amp; Malicious URL Early-Warning</p>
+    </header>
+
+    <section class="card input-card">
+      <div class="input-row">
+        <input id="urlInput" type="text" placeholder="Paste a URL to analyze..." />
+        <button id="analyzeBtn" class="btn primary">Analyze</button>
+      </div>
+      <button id="currentTabBtn" class="btn secondary">Analyze Current Tab</button>
+    </section>
+
+    <section id="resultCard" class="card result-card hidden">
+      <div class="result-header">
+        <div class="score-ring">
+          <svg viewBox="0 0 36 36" class="score-svg">
+            <path class="score-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <path id="scorePath" class="score-fg" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+          </svg>
+          <div class="score-text">
+            <span id="scoreValue">0</span>
+          </div>
+        </div>
+        <div class="verdict-area">
+          <div id="verdictBadge" class="verdict safe">Safe</div>
+          <div id="domainText" class="domain-text"></div>
+        </div>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail">
+          <span class="detail-label">Scheme</span>
+          <span id="schemeText" class="detail-value">-</span>
+        </div>
+        <div class="detail">
+          <span class="detail-label">Path</span>
+          <span id="pathText" class="detail-value">-</span>
+        </div>
+        <div class="detail full">
+          <span class="detail-label">Host</span>
+          <span id="hostText" class="detail-value">-</span>
+        </div>
+      </div>
+
+      <div class="reasons-section">
+        <h3>Detected Signals</h3>
+        <ul id="reasonsList" class="reasons-list"></ul>
+      </div>
+
+      <p class="disclaimer">Heuristic analysis; not a guarantee of safety.</p>
+    </section>
+
+    <section class="card history-card">
+      <h3>Recent Analysis</h3>
+      <ul id="historyList" class="history-list"></ul>
+      <button id="clearHistoryBtn" class="text-btn">Clear history</button>
+    </section>
+
+    <footer>
+      <a id="optionsLink" href="#">Settings</a>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
